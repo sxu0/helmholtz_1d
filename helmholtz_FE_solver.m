@@ -88,7 +88,29 @@ U = A \ F;
 % plot solution
 if plt == true
     figure(1), clf,
-    plotfield1d(mesh, ref, U);
+    % next 7 lines are sourced from `femmat/util/plot/plotfield1d()`
+    nlp = size(ref.shp, 2);
+    xxplot = linspace(0, 1, 10*mesh.p)';
+    shp = shape1d(ref.p, ref.xint, xxplot);
+    xtri = reshape(mesh.coord(mesh.tri), [nelem, nlp]);
+    utri = reshape(U(mesh.tri), [nelem, nlp]);
+    xx = shp * xtri';
+    uu = shp * utri';
+    % flatten to 1D array without repeated nodes
+    xxx = unique(xx);
+    uuu = zeros(size(xxx));
+    for i = 1:numel(xxx)
+        [i1, i2] = find(xx == xxx(i));
+        uuu(i) = uu(i1(1), i2(1));
+    end
+    % draw waves
+    beauty = plot(xxx, imag(uuu), xxx, real(uuu));
+    legend('imag part', 'real part')
+    ylim([-3*abs(mag_inc_wave), 3*abs(mag_inc_wave)])
+    title(['1D Helmholtz soln, $A=' num2str(mag_inc_wave) ...
+        '$, $p=' num2str(p) '$, $n_e=' num2str(nelem) '$'])
+    xlabel('$x \in \Omega$')
+    ylabel('$u(x; k)$')
 end
 
 end
