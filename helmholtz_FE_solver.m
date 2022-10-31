@@ -108,7 +108,8 @@ if plt == true
     legend('imag part', 'real part')
     ylim([-3*abs(mag_inc_wave), 3*abs(mag_inc_wave)])
     title(['1D Helmholtz soln, $A=' num2str(mag_inc_wave) ...
-        '$, $p=' num2str(p) '$, $n_e=' num2str(nelem) '$'])
+        '$, $p=' num2str(p) '$, $n_e=' num2str(nelem) ...
+        '$, $k=' num2str(k, '%.2f') '$'])
     xlabel('$x \in \Omega$')
     ylabel('$u(x; k)$')
 end
