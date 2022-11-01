@@ -1,7 +1,7 @@
 % helmholtz_fe_setup.m
 % Assembles the parameter-independent stiffness matrices & load vectors.
 
-function [A1, A2, A3, F] = helmholtz_off_on_setup(mag_inc_wave, p, nelem)
+function [A1, A2, A3, F1] = helmholtz_off_on_setup(mag_inc_wave, p, nelem)
 
 % arguments
 % =========
@@ -70,6 +70,6 @@ A2 = sparse(imat(:), jmat(:), amat2(:), ndof, ndof);  % Theta_a2 = -k^2
 A3 = sparse(1, 1, 1i, ndof, ndof);  % Theta_a3 = k
 
 % set up param-indep load vector
-F = zeros(ndof, 1);
-F(1, 1) = -2i * mag_inc_wave;  % Theta_f1 = k
+F1 = zeros(ndof, 1);
+F1(1, 1) = -2i * mag_inc_wave;  % Theta_f1 = k
 end
