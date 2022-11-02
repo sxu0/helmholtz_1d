@@ -74,11 +74,15 @@ err_tol = 2.2e-7;
 [A1_N_max, A2_N_max, A3_N_max, F1_N_max, Z_N_max, mesh, ref] = helmholtz_RB_offline( ...
     n_train, err_tol);
 
-%% ONLINE & VISUALIZATION
+%% ONLINE
 [u_N_arr, s_N_arr, u_arr] = helmholtz_RB_online( ...
     A1_N_max, A2_N_max, A3_N_max, F1_N_max, Z_N_max, mag_inc_wave, k_arr);
-fig_soln = figure;
-labels = cell(size(k_arr));
+
+%% VISUALIZATION
+if ~exist('N', 'var')
+    N = size(A1_N_max, 1);
+end
+figure;
 for j = 1:numel(k_arr)
     U = u_arr(:, j);
     % next 7 lines are sourced from `femmat/util/plot/plotfield1d()`
@@ -97,18 +101,15 @@ for j = 1:numel(k_arr)
         uuu(i) = uu(i1(1), i2(1));
     end
     % draw waves
-    hold on
-    plot(xxx, real(uuu))
-    labels{j} = ['$k=' num2str(k_arr(j), '%.4f') '$'];
+    fig_soln = plot(xxx, real(uuu));
+    ymin = min(min(real(u_arr)));
+    ymax = max(max(real(u_arr)));
+    yrange = ymax - ymin;
+    ylim([ymin - 0.1 * yrange, ymax + 0.1 * yrange])
+    legend(['$k=' num2str(k_arr(j), '%.4f') '$'])
+    title(['1D Helmholtz Solution Real Part, $A=' num2str(mag_inc_wave) ...
+        '$; $n_\mathrm{train}=' num2str(n_train) '$, $N=' num2str(N) '$'])
+    xlabel('$x \in \Omega$')
+    ylabel('$u_\mathrm{RB}(x; k)$')
+    pause(0.1)
 end
-hold off
-legend(labels, location='eastoutside')
-fig_width = 19 * numel(labels);
-set(fig_soln, 'position', [250 50 fig_width fig_width])
-if ~exist('N', 'var')
-    N = size(A1_N_max, 1);
-end
-title(['1D Helmholtz Solutions, $A=' num2str(mag_inc_wave) ...
-    '$; $n_\mathrm{train}=' num2str(n_train) '$, $N=' num2str(N) '$'])
-xlabel('$x \in \Omega$')
-ylabel('$u_h(x; k)$')
