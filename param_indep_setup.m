@@ -1,7 +1,7 @@
 % helmholtz_fe_setup.m
 % Assembles the parameter-independent stiffness matrices & load vectors.
 
-function [A1, A2, A3, F1] = helmholtz_off_on_setup(mag_inc_wave, p, nelem)
+function [A1, A2, A3, F1] = param_indep_setup(mag_inc_wave, p, nelem)
 
 % arguments
 % =========

@@ -1,9 +1,9 @@
-% helmholtz_FE_solver.m
-% 1D Helmholtz equation.
+% fe_solver.m
+% For 1D Helmholtz equation.
 % Using femmat library in UTIAS ACEL gitlab.
 % Shiqi Xu
 
-function [U, mesh, ref] = helmholtz_FE_solver(k, mag_inc_wave, p, nelem, plt)
+function [U, mesh, ref] = fe_solver(k, mag_inc_wave, p, nelem, plt)
 % arguments
 % =========
 % k (float): nondimensionalized wavenumber, on (0, inf]

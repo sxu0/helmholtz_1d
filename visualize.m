@@ -1,4 +1,4 @@
-function anim_soln = helmholtz_visualize(k_arr, u_arr, mesh, ref, mag_inc_wave, n_train, N, complex_part)
+function anim_soln = visualize(k_arr, u_arr, mesh, ref, mag_inc_wave, n_train, N, complex_part)
 
 figure;
 for j = 1:numel(k_arr)

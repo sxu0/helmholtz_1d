@@ -1,4 +1,4 @@
-function X = helmholtz_assemble_inprod_matrix(p, nelem)
+function X = h1_inprod_matrix(p, nelem)
 % arguments
 % =========
 % p (int): polynomial degree

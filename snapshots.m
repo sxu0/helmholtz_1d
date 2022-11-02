@@ -1,4 +1,4 @@
-function [Z_N_max, mesh, ref] = helmholtz_snapshots(n_train, epsilon_tol, p, nelem, plt, mag_inc_wave)
+function [Z_N_max, mesh, ref] = snapshots(n_train, epsilon_tol, p, nelem, plt, mag_inc_wave)
 % inputs
 % ======
 % n_train (int): number of parameter space samples
@@ -46,15 +46,15 @@ for n = 1:n_train
     mu = k_train_arr(n);
     % U are p*nelem+1 by 1 vectors
     if n == 1
-        [U_n, mesh, ref] = helmholtz_FE_solver(mu, mag_inc_wave, p, nelem);
+        [U_n, mesh, ref] = fe_solver(mu, mag_inc_wave, p, nelem);
     else
-        [U_n, ~, ~] = helmholtz_FE_solver(mu, mag_inc_wave, p, nelem);
+        [U_n, ~, ~] = fe_solver(mu, mag_inc_wave, p, nelem);
     end
     U_store(:, n) = U_n;
 end
 
 % assemble H1 inner product matrix (over spatial domain)
-X_H1 = helmholtz_assemble_inprod_matrix(p, nelem);
+X_H1 = h1_inprod_matrix(p, nelem);
 
 % assemble correlation matrix
 C_POD = zeros(n_train, n_train);

@@ -1,4 +1,4 @@
-function [A1_N_max, A2_N_max, A3_N_max, F1_N_max, Z_N_max, mesh, ref] = helmholtz_RB_offline( ...
+function [A1_N_max, A2_N_max, A3_N_max, F1_N_max, Z_N_max, mesh, ref] = rb_offline( ...
     n_train, err_tol, mag_inc_wave, p, nelem ...
     )
 
@@ -16,12 +16,12 @@ if ~exist('nelem', 'var')
 end
 
 % compute reduced basis
-[Z_N_max, mesh, ref] = helmholtz_snapshots( ...
+[Z_N_max, mesh, ref] = snapshots( ...
     n_train, err_tol, p, nelem, false, mag_inc_wave ...
     );
 
 % assemble parameter-independent stiffness matrices & load vector
-[A1, A2, A3, F1] = helmholtz_off_on_setup(mag_inc_wave, p, nelem);
+[A1, A2, A3, F1] = param_indep_setup(mag_inc_wave, p, nelem);
 % note: Theta_a1 = 1, Theta_a2 = -k^2, Theta_a3 = k, Theta_f1 = k
 % thus A = A1 - k^2 .* A2 + k .* A3, F = k .* F1
 
