@@ -111,7 +111,7 @@ if plt == true
         '$, $p=' num2str(p) '$, $n_e=' num2str(nelem) ...
         '$, $k=' num2str(k, '%.2f') '$'])
     xlabel('$x \in \Omega$')
-    ylabel('$u(x; k)$')
+    ylabel('$u_h(x; k)$')
 end
 
 end
