@@ -89,18 +89,32 @@ epsilons_POD = sqrt(cumsum(lambdas_ordered, 'reverse'));  % L2 norm in param
 
 Ns = 1:numel(lambdas_ordered);
 
-if plt == true
-    figure  % there is a kink!
+if strcmp(plt, 'lin')
+    figure
     yyaxis left
-    semilogy(Ns, lambdas_ordered, 'o')
+    plot(Ns, real(lambdas_ordered), 'o')
     ylabel("$\lambda^{\mathrm{POD},\,k}$")
     yyaxis right
-    semilogy(Ns, epsilons_POD, '.')
+    plot(Ns, real(epsilons_POD), '.')
     ylabel("$\bar{\bar{\epsilon}}_N^\mathrm{POD}$")
     xlabel("$k$")
     legend('Eigenvalue', 'Truncation Error up to $N$th Eigenmode')
-    title(['Sorted Eigenvalues \& Associated Truncation Errors, ' ...
-        '$n_\mathrm{train}=' num2str(n_train) '$'])
+    title(['Sorted Eigenvalues \& Associated Truncation Errors ' ...
+        '(Real Part), $n_\mathrm{train}=' num2str(n_train) '$'])
+    ylim('padded')
+    set(gcf, 'position', [300 300 640 480])
+elseif strcmp(plt, 'log')
+    figure  % there is a kink!
+    yyaxis left
+    semilogy(Ns, real(lambdas_ordered), 'o')
+    ylabel("$\lambda^{\mathrm{POD},\,k}$")
+    yyaxis right
+    semilogy(Ns, real(epsilons_POD), '.')
+    ylabel("$\bar{\bar{\epsilon}}_N^\mathrm{POD}$")
+    xlabel("$k$")
+    legend('Eigenvalue', 'Truncation Error up to $N$th Eigenmode')
+    title(['Sorted Eigenvalues \& Associated Truncation Errors ' ...
+        '(Real Part), $n_\mathrm{train}=' num2str(n_train) '$'])
     ylim('padded')
     set(gcf, 'position', [300 300 640 480])
 end
