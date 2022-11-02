@@ -80,36 +80,7 @@ err_tol = 2.2e-7;
 
 %% VISUALIZATION
 if ~exist('N', 'var')
-    N = size(A1_N_max, 1);
+    N = size(u_N_arr, 1);
 end
-figure;
-for j = 1:numel(k_arr)
-    U = u_arr(:, j);
-    % next 7 lines are sourced from `femmat/util/plot/plotfield1d()`
-    nlp = size(ref.shp, 2);
-    xxplot = linspace(0, 1, 10*mesh.p)';
-    shp = shape1d(ref.p, ref.xint, xxplot);
-    xtri = reshape(mesh.coord(mesh.tri), [nelem, nlp]);
-    utri = reshape(U(mesh.tri), [nelem, nlp]);
-    xx = shp * xtri';
-    uu = shp * utri';
-    % flatten to 1D array without repeated nodes
-    xxx = unique(xx);
-    uuu = zeros(size(xxx));
-    for i = 1:numel(xxx)
-        [i1, i2] = find(xx == xxx(i));
-        uuu(i) = uu(i1(1), i2(1));
-    end
-    % draw waves
-    fig_soln = plot(xxx, real(uuu));
-    ymin = min(min(real(u_arr)));
-    ymax = max(max(real(u_arr)));
-    yrange = ymax - ymin;
-    ylim([ymin - 0.1 * yrange, ymax + 0.1 * yrange])
-    legend(['$k=' num2str(k_arr(j), '%.4f') '$'])
-    title(['1D Helmholtz Solution Real Part, $A=' num2str(mag_inc_wave) ...
-        '$; $n_\mathrm{train}=' num2str(n_train) '$, $N=' num2str(N) '$'])
-    xlabel('$x \in \Omega$')
-    ylabel('$u_\mathrm{RB}(x; k)$')
-    pause(0.1)
-end
+anim_soln_real = helmholtz_visualize(k_arr, u_arr, mesh, ref, mag_inc_wave, n_train, N);
+anim_soln_imag = helmholtz_visualize(k_arr, u_arr, mesh, ref, mag_inc_wave, n_train, N, 'imag');
