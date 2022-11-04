@@ -1,12 +1,14 @@
 function X = h1_inprod_matrix(p, nelem)
-% arguments
-% =========
-% p (int): polynomial degree
-% nelem (int): number of elements over physical domain
+% Assembles sparse H1 inner product matrix.
+%
+% inputs
+% ------
+% p (int): polynomial degree of FE Lagrange basis
+% nelem (int): number of elements in FE discretization
 %
 % outputs
-% =======
-% X (matrix(float)): H1 inner product matrix
+% -------
+% X (sparse matrix of floats): {ndof by ndof} H1 inner product matrix
 
 % number of quadrature points
 pquad = 2 * p;

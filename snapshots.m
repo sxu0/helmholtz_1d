@@ -1,18 +1,22 @@
 function [Z_N_max, mesh, ref] = snapshots(n_train, epsilon_tol, p, nelem, plt, mag_inc_wave)
+% Produce snapshots sampled across parameter space, solved by FEM.
+% Outputs reduced basis matrix, containing reduced basis functions.
+%
 % inputs
-% ======
-% n_train (int): number of parameter space samples
-% epsilon_tol (float): error threshold for eigenvalue cutoff
-% p (int, optional): polynomial degree, defaults to 2
-% nelem (int, optional): number of mesh elements over physical domain,
+% ------
+% n_train (int): number of parameter space samples to solve fully; aka
+%   number of snapshots to produce
+% epsilon_tol (float): error threshold for truncating tailing eigenmodes
+% p (int, optional): polynomial degree of FE Lagrange basis, defaults to 2
+% nelem (int, optional): number of FE mesh elements in FE discretization,
 %   defaults to 1000
 % plt (bool, optional): whether to generate plots, defaults to false
 % mag_inc_wave (float, optional): nondimensionalized incoming wave
 %   magnitude, defaults to 1
 %
-% returns
-% =======
-% Z_N_max: N_t x N_max array whose columns are basis functions
+% outputs
+% -------
+% Z_N_max: {ndof by N_max} reduced basis matrix
 % mesh: FE mesh object
 % ref: FE reference element object
 
@@ -44,7 +48,7 @@ N_t = p * nelem + 1;  % dim of "truth" FE approx
 U_store = zeros(N_t, n_train);
 for n = 1:n_train
     mu = k_train_arr(n);
-    % U are p*nelem+1 by 1 vectors
+    % U are {p*nelem+1 by 1} vectors
     if n == 1
         [U_n, mesh, ref] = fe_solver(mu, mag_inc_wave, p, nelem);
     else
@@ -73,7 +77,7 @@ C_POD = C_POD + C_POD' - eye(size(C_POD)) .* C_POD;
 % sort eigenvalues largest -> smallest
 % (note eig returns eigenvalues in an arbitrary order!)
 [~, ind] = sort(diag(lambdas), 'descend');
-lambdas = lambdas(ind, ind);  % dimensions n_train by n_train
+lambdas = lambdas(ind, ind);  % dimensions {n_train by n_train}
 lambdas_ordered = diag(lambdas);
 psis = psis(:, ind);
 

@@ -1,20 +1,19 @@
-% helmholtz_fe_setup.m
-% Assembles the parameter-independent stiffness matrices & load vectors.
-
 function [A1, A2, A3, F1] = param_indep_setup(mag_inc_wave, p, nelem)
-
-% arguments
-% =========
+% Assembles parameter-independent stiffness matrices & load vectors
+% for offline-online decomposition of reduced-basis solver.
+% Note that Q_a = 3 and Q_f = 1 here.
+%
+% inputs
+% ------
 % mag_inc_wave (float): nondimensionalized magnitude of incident wave
-% p (int): polynomial degree of FE approximation
+% p (int): polynomial degree of FE Lagrange basis
 % nelem (int): number of elements in FE discretization
-% 
+%
 % outputs
-% =======
-% A1 (matrix): parameter-independent stiffness matrix 1
-% A2 (matrix): parameter-independent stiffness matrix 2
-% A3 (matrix): parameter-independent stiffness matrix 3 (Q_a = 3 here)
-% F (vector): parameter-independent load vector (Q_f = 1 here)
+% -------
+% A1, A2, A3 (sparse matrices of floats): {ndof by ndof} parameter
+%   -independent FE stiffness matrices
+% F (vector of floats): {ndof by 1} parameter-independent FE load vector
 
 % number of gaussian quadrature points
 pquad = 2 * p;
@@ -72,4 +71,5 @@ A3 = sparse(1, 1, 1i, ndof, ndof);  % Theta_a3 = k
 % set up param-indep load vector
 F1 = zeros(ndof, 1);
 F1(1, 1) = -2i * mag_inc_wave;  % Theta_f1 = k
+
 end

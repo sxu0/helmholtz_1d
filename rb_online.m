@@ -2,6 +2,30 @@ function [u_N_arr, s_arr, u_arr] = rb_online( ...
     A1_N_max, A2_N_max, A3_N_max, F1_N_max, Z_N_max, mag_inc_wave, ...
     mu_arr, N ...
     )
+% Online procedure for reduced-basis solver, including
+% forming parameter-dependent stiffness matrix & load vector,
+% solving for RB coefficients, and converting them to FE coefficients
+%
+% inputs
+% ------
+% A1_N_max, A2_N_max, A3_N_max (sparse matrices of floats): {N_max by
+%   N_max} (hierarchical) parameter-independent stiffness matrices
+% F1_N_max (vector of floats): {N_max by 1} (hierarchical) parameter
+%   -independent load vector
+% Z_N_max (matrix of floats): {ndof by N_max} (hierarchical in N) reduced
+%   basis matrix
+% mag_inc_wave (float): nondimensionalized magnitude of incident wave
+% mu_arr (array of floats): target parameter values for solution
+% N (int): dimension of reduced basis
+%
+% outputs
+% -------
+% u_N_arr (matrix of floats): RB soln coefficients, stored in
+%   {N by numel(mu_arr)} array (each column corresponds to a mu in mu_arr)
+% s_arr (array of floats): quantity of interest evaluated for each mu
+%   value, stored in {1 by numel(mu_arr)} array
+% u_arr (matrix of floats): FE coefficients from RB soln, stored in
+%   {ndof by numel(mu_arr)} array
 
 N_max = size(A1_N_max, 1);
 if ~exist('N', 'var')

@@ -1,4 +1,23 @@
 function anim_soln = visualize(k_arr, u_arr, mesh, ref, mag_inc_wave, n_train, N, complex_part)
+% Visualizes real/imag parts of solution, animated by wavenumber.
+%
+% inputs
+% ------
+% k_arr (array of floats): wavenumbers (param values) targeted by solution
+% u_arr (array of floats): soln FE coefficients at each wavenumber;
+%   {ndof by numel(k_arr)} array
+% mesh: FE mesh object from femmat
+% ref: FE reference element object from femmat
+% mag_inc_wave (float, optional): nondimensionalized incoming wave
+%   magnitude
+% n_train (int, optional): number of snapshots produced
+% N (int, optional): dimension of reduced basis
+% complex_part (str, optional): choose 'real' or 'imag' part to plot,
+%   defaults to real
+%
+% outputs
+% -------
+% anim_soln (figure): animated solution figure
 
 figure;
 for j = 1:numel(k_arr)

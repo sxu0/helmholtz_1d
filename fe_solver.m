@@ -1,22 +1,20 @@
-% fe_solver.m
-% For 1D Helmholtz equation.
-% Using femmat library in UTIAS ACEL gitlab.
-% Shiqi Xu
-
 function [U, mesh, ref] = fe_solver(k, mag_inc_wave, p, nelem, plt)
-% arguments
-% =========
-% k (float): nondimensionalized wavenumber, on (0, inf]
+% Finite element solver for 1D Helmholtz equation.
+% Uses femmat library in UTIAS ACEL gitlab.
+%
+% inputs
+% ------
+% k (float): nondimensionalized wavenumber, restricted to (0, inf]
 % mag_inc_wave (float): nondimensionalized magnitude of incident wave
-% p (int): polynomial degree of FE basis
-% nelem (int): number of elements over physical domain
+% p (int): polynomial degree of FE Lagrange basis
+% nelem (int): number of elements in FE discretization
 % plt (bool, optional): whether to generate plots, defaults to false
 %
 % outputs
-% =======
-% U (matrix(float)): nodal basis coefficients
-% mesh: FE mesh object
-% ref: FE reference element object
+% -------
+% U (vector of floats): {ndof by 1} nodal basis coefficients
+% mesh: FE mesh object from femmat
+% ref: FE reference element object from femmat
 
 if ~exist('plt', 'var')
     plt = false;
