@@ -39,8 +39,9 @@ for j = 1:numel(k_arr)
     end
     % draw waves
     if j == 1
-        anim_soln = figure;
+        anim_soln = figure(2);
     end
+    figure(2)
     plot(xxx, real(uuu));
     hold on
     plot(xxx, imag(uuu));
@@ -72,7 +73,7 @@ for j = 1:numel(k_arr)
     if exist('gif_name', 'var') && ~isempty(gif_name)
         exportgraphics(anim_soln, gif_name, 'Append', true);
     end
-    pause(0.02)
+    pause(0.025)
 end
 
 end
