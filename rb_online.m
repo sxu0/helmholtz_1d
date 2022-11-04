@@ -1,4 +1,4 @@
-function [u_N_arr, s_N_arr, u_arr] = rb_online( ...
+function [u_N_arr, s_arr, u_arr] = rb_online( ...
     A1_N_max, A2_N_max, A3_N_max, F1_N_max, Z_N_max, mag_inc_wave, ...
     mu_arr, N ...
     )
@@ -39,6 +39,6 @@ end
 u_arr = Z_N * u_N_arr;
 
 % generate output
-s_N_arr = 1/2 .* abs(mag_inc_wave - u_arr(1,:)) .^2;
+s_arr = 1/2 .* abs(mag_inc_wave - u_arr(1,:)) .^2;
 
 end
