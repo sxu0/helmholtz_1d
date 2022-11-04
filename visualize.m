@@ -71,6 +71,9 @@ for j = 1:numel(k_arr)
     ylabel('$u_\mathrm{RB}(x; k)$')
     % save figure to gif
     if exist('gif_name', 'var') && ~isempty(gif_name)
+        if j == 1 && isfile(gif_name)
+            delete(gif_name)
+        end
         exportgraphics(anim_soln, gif_name, 'Append', true);
     end
     pause(0.025)
