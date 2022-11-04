@@ -33,15 +33,10 @@ if ~exist('N', 'var')
     N = size(u_N_arr, 1);
 end
 if save_figs
-    real_gif = fullfile('figs', ...
-        ['soln_real_pt_ntrain=' num2str(n_train) '_N=' num2str(N) '.gif']);
-    imag_gif = fullfile('figs', ...
-    ['soln_imag_pt_ntrain=' num2str(n_train) '_N=' num2str(N) '.gif']);
+    output_gif = fullfile('figs', ...
+        ['soln_ntrain=' num2str(n_train) '_N=' num2str(N) '.gif']);
 else
-    real_gif = '';
-    imag_gif = '';
+    output_gif = '';
 end
-anim_soln_real = visualize( ...
-    k_arr, u_arr, mesh, ref, mag_inc_wave, n_train, N, 'real', real_gif);
-anim_soln_imag = visualize( ...
-    k_arr, u_arr, mesh, ref, mag_inc_wave, n_train, N, 'imag', imag_gif);
+visualize( ...
+    k_arr, u_arr, mesh, ref, mag_inc_wave, n_train, N, output_gif);

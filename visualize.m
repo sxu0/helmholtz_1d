@@ -1,7 +1,4 @@
-function anim_soln = visualize( ...
-    k_arr, u_arr, mesh, ref, mag_inc_wave, n_train, N, ...
-    complex_part, gif_name ...
-    )
+function anim_soln = visualize(k_arr, u_arr, mesh, ref, mag_inc_wave, n_train, N, gif_name)
 % Visualizes real/imag parts of solution, animated by wavenumber.
 %
 % inputs
@@ -15,8 +12,6 @@ function anim_soln = visualize( ...
 %   magnitude
 % n_train (int, optional): number of snapshots produced
 % N (int, optional): dimension of reduced basis
-% complex_part (str, optional): choose 'real' or 'imag' part to plot,
-%   defaults to real
 % filename (str, optional): file path for saving output animated figure,
 %   does not save if '' or unspecified
 %
@@ -46,18 +41,16 @@ for j = 1:numel(k_arr)
     if j == 1
         anim_soln = figure;
     end
-    if ~exist('complex_part', 'var') || strcmp(complex_part, 'real')
-        plot(xxx, real(uuu));
-        ymin = min(min(real(u_arr)));
-        ymax = max(max(real(u_arr)));
-    elseif strcmp(complex_part, 'imag')
-        plot(xxx, imag(uuu));
-        ymin = min(min(imag(u_arr)));
-        ymax = max(max(imag(u_arr)));
-    end
+    plot(xxx, real(uuu));
+    hold on
+    plot(xxx, imag(uuu));
+    hold off
+    ymin = min(min(min(real(u_arr))), min(min(imag(u_arr))));
+    ymax = max(max(max(real(u_arr))), max(max(imag(u_arr))));
     yrange = ymax - ymin;
     ylim([ymin - 0.1 * yrange, ymax + 0.1 * yrange])
-    legend(['$k=' num2str(k_arr(j), '%.4f') '$'])
+    legend('real part', 'imag part')
+    text(0.055, 0.920, ['$k=' num2str(k_arr(j), '%.4f') '$'], units='normalized')
     if exist('mag_inc_wave', 'var')
         BC_config = [': $A=' num2str(mag_inc_wave) '$'];
     else
@@ -72,11 +65,7 @@ for j = 1:numel(k_arr)
     else
         RB_params = '';
     end
-    if ~exist('complex_part', 'var') || strcmp(complex_part, 'real')
-        title(['1D Helmholtz Solution Real Part' BC_config RB_params])
-    elseif strcmp(complex_part, 'imag')
-        title(['1D Helmholtz Solution Imaginary Part' BC_config RB_params])
-    end
+    title(['1D Helmholtz Solution' BC_config RB_params])
     xlabel('$x \in \Omega$')
     ylabel('$u_\mathrm{RB}(x; k)$')
     % save figure to gif
