@@ -1,4 +1,7 @@
-function anim_soln = visualize(k_arr, u_arr, mesh, ref, mag_inc_wave, n_train, N, complex_part)
+function anim_soln = visualize( ...
+    k_arr, u_arr, mesh, ref, mag_inc_wave, n_train, N, ...
+    complex_part, gif_name ...
+    )
 % Visualizes real/imag parts of solution, animated by wavenumber.
 %
 % inputs
@@ -14,12 +17,13 @@ function anim_soln = visualize(k_arr, u_arr, mesh, ref, mag_inc_wave, n_train, N
 % N (int, optional): dimension of reduced basis
 % complex_part (str, optional): choose 'real' or 'imag' part to plot,
 %   defaults to real
+% filename (str, optional): file path for saving output animated figure,
+%   does not save if '' or unspecified
 %
 % outputs
 % -------
 % anim_soln (figure): animated solution figure
 
-figure;
 for j = 1:numel(k_arr)
     U = u_arr(:, j);
     % next 8 lines are sourced from `femmat/util/plot/plotfield1d()`
@@ -39,12 +43,15 @@ for j = 1:numel(k_arr)
         uuu(i) = uu(i1(1), i2(1));
     end
     % draw waves
+    if j == 1
+        anim_soln = figure;
+    end
     if ~exist('complex_part', 'var') || strcmp(complex_part, 'real')
-        anim_soln = plot(xxx, real(uuu));
+        plot(xxx, real(uuu));
         ymin = min(min(real(u_arr)));
         ymax = max(max(real(u_arr)));
     elseif strcmp(complex_part, 'imag')
-        anim_soln = plot(xxx, imag(uuu));
+        plot(xxx, imag(uuu));
         ymin = min(min(imag(u_arr)));
         ymax = max(max(imag(u_arr)));
     end
@@ -72,7 +79,11 @@ for j = 1:numel(k_arr)
     end
     xlabel('$x \in \Omega$')
     ylabel('$u_\mathrm{RB}(x; k)$')
-    pause(0.1)
+    % save figure to gif
+    if exist('gif_name', 'var') && ~isempty(gif_name)
+        exportgraphics(anim_soln, gif_name, 'Append', true);
+    end
+    pause(0.02)
 end
 
 end
