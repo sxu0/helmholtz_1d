@@ -63,10 +63,10 @@ X_H1 = h1_inprod_matrix(p, nelem);
 % assemble correlation matrix
 C_POD = zeros(n_train, n_train);
 for i = 1:n_train
-    U_k_i = U_store(:, i);
+    U_N_i = U_store(:, i);
     for j = 1:i
-        U_k_j = U_store(:, j);
-        C_POD(i, j) = 1/n_train * (U_k_i' * X_H1 * U_k_j);
+        U_N_j = U_store(:, j);
+        C_POD(i, j) = 1/n_train * (U_N_i' * X_H1 * U_N_j);
     end
 end
 % build symmetric matrix from lower left triangular part
@@ -81,7 +81,7 @@ lambdas = lambdas(ind, ind);  % dimensions {n_train by n_train}
 lambdas_ordered = diag(lambdas);
 psis = psis(:, ind);
 
-% normalize eigenvectors such that their inner product is n_train * lambda_k
+% normalize eigenvectors such that their inner product is n_train * lambda_N
 psis = psis ./ sqrt(repmat(lambdas_ordered', n_train, 1) .* n_train);
 
 %% determine basis functions to truncate based on minimum error tolerance
@@ -97,11 +97,11 @@ if strcmp(plt, 'lin')
     figure
     yyaxis left
     plot(Ns, real(lambdas_ordered), 'o')
-    ylabel("$\lambda^{\mathrm{POD},\,k}$")
+    ylabel("$\lambda^{\mathrm{POD},\,N}$")
     yyaxis right
     plot(Ns, real(epsilons_POD), '.')
     ylabel("$\bar{\bar{\epsilon}}_N^\mathrm{POD}$")
-    xlabel("$k$")
+    xlabel("$N$")
     legend('Eigenvalue', 'Truncation Error up to $N$th Eigenmode')
     title(['Sorted Eigenvalues \& Associated Truncation Errors ' ...
         '(Real Part), $n_\mathrm{train}=' num2str(n_train) '$'])
@@ -111,11 +111,11 @@ elseif strcmp(plt, 'log')
     figure  % there is a kink!
     yyaxis left
     semilogy(Ns, real(lambdas_ordered), 'o')
-    ylabel("$\lambda^{\mathrm{POD},\,k}$")
+    ylabel("$\lambda^{\mathrm{POD},\,N}$")
     yyaxis right
     semilogy(Ns, real(epsilons_POD), '.')
     ylabel("$\bar{\bar{\epsilon}}_N^\mathrm{POD}$")
-    xlabel("$k$")
+    xlabel("$N$")
     legend('Eigenvalue', 'Truncation Error up to $N$th Eigenmode')
     title(['Sorted Eigenvalues \& Associated Truncation Errors ' ...
         '(Real Part), $n_\mathrm{train}=' num2str(n_train) '$'])
