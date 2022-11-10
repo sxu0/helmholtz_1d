@@ -93,6 +93,25 @@ epsilons_POD = sqrt(cumsum(lambdas_ordered, 'reverse'));  % L2 norm in param
 
 Ns = 1:numel(lambdas_ordered);
 
+if false  % exploration
+    figure
+    yyaxis left
+    plot(imag(lambdas_ordered), 'o')
+    ylabel("$\mathrm{imag} \left\{ \lambda^{\mathrm{POD},\,N} \right\}$")
+    yyaxis right
+    plot(imag(epsilons_POD), '.')
+    ylabel("$\mathrm{imag} \left\{ \bar{\bar{\epsilon}}_N^\mathrm{POD} \right\}$")
+    xlabel("N")
+    legend('Eigenvalue', 'Truncation Error up to $N$th Eigenmode', ...
+        'location', 'bestoutside', 'orientation', 'horizontal')
+    title(['\parbox[b]{5in}{\centering ' ...
+        'Imaginary Parts of Sorted Eigenvalues \& Associated ' ...
+        'Truncation Errors,\\ $n_\mathrm{train}=' num2str(n_train) '$ }'])
+    ylim('padded')
+    set(gcf, 'position', [250 250 640 540])
+    % print(fullfile('figs', 'sorted_eigenvalues_and_errors_imag.png'), '-dpng')
+end
+
 if strcmp(plt, 'lin')
     figure
     yyaxis left
