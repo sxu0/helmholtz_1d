@@ -16,7 +16,7 @@ nelem = 1000;
 % examine + set ideal error tolerance below
 [~, ~, ~] = snapshots(n_train, 1, p, nelem, 'log', mag_inc_wave);
 if save_figs
-    print(fullfile('figs', 'sorted_eigenvalues_and_errors.png'), '-dpng')
+    print(fullfile('figs', 'sorted_eigenvalues_and_errors_real.png'), '-dpng')
 end
 
 %% OFFLINE STEPS
