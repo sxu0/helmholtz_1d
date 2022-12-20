@@ -40,3 +40,14 @@ else
 end
 visualize( ...
     k_arr, u_arr, mesh, ref, mag_inc_wave, n_train, N, output_gif);
+
+%% QUANTITY OF INTEREST
+q_arr = quantity_of_interest(u_arr, mag_inc_wave);
+figure;
+plot(k_arr, q_arr, 'o')
+xlim('padded')
+ylim('padded')
+xlabel('$k$')
+ylabel('$q_N(k)$')
+title(['RB output $q_N$ by $k$, $n_\mathrm{train}=' ...
+    num2str(n_train) '$, $n_\mathrm{solve}=' num2str(numel(k_arr)) '$'])
