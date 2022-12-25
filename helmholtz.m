@@ -1,5 +1,6 @@
 % running the 1D Helmholtz solver!
 clear; close all; clc;
+addpath('lib')
 
 %% CONFIG
 save_figs = false;
