@@ -25,7 +25,7 @@ err_tol = 2e-6;
     n_train, err_tol);
 
 %% ONLINE STEPS
-[u_N_arr, s_N_arr, u_arr] = rb_online( ...
+[u_N_arr, q_N_arr, u_arr] = rb_online( ...
     A1_N_max, A2_N_max, A3_N_max, F1_N_max, Z_N_max, mag_inc_wave, k_arr);
 
 %% VISUALIZATION
