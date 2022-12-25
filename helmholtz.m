@@ -51,3 +51,8 @@ xlabel('$k$')
 ylabel('$q_N(k)$')
 title(['RB output $q_N$ by $k$, $n_\mathrm{train}=' ...
     num2str(n_train) '$, $n_\mathrm{solve}=' num2str(numel(k_arr)) '$'])
+
+%% FE ERROR CONVERGENCE
+nnelem = 2 .^ (1:12);
+[u_err_fe, q_err_fe] = error_fe(nnelem, 2*pi, mag_inc_wave, p, true);
+% see error_fe.m for a couple of things to check
