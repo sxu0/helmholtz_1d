@@ -1,4 +1,4 @@
-function [U, mesh, ref] = fe_solver(k, mag_inc_wave, p, nelem, plt)
+function [U, mesh, ref, A] = fe_solver(k, mag_inc_wave, p, nelem, plt)
 % Finite element solver for 1D Helmholtz equation.
 % Uses femmat library in UTIAS ACEL gitlab.
 %
@@ -15,6 +15,7 @@ function [U, mesh, ref] = fe_solver(k, mag_inc_wave, p, nelem, plt)
 % U (vector of floats): {ndof by 1} nodal basis coefficients
 % mesh: FE mesh object from femmat
 % ref: FE reference element object from femmat
+% A (matrix of floats): global stiffness matrix
 
 if ~exist('plt', 'var')
     plt = false;
