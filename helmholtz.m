@@ -56,3 +56,8 @@ title(['RB output $q_N$ by $k$, $n_\mathrm{train}=' ...
 nnelem = 2 .^ (1:12);
 [u_err_fe, q_err_fe] = error_fe(nnelem, 2*pi, mag_inc_wave, p, true);
 % see error_fe.m for a couple of things to check
+
+%% RB ERROR CONVERGENCE
+NN = 2:size(u_N_arr, 1);
+[u_err_NN, q_err_NN] = error_rb( ...
+    NN, k_arr, n_train, err_tol, mag_inc_wave, p, nelem, true);
