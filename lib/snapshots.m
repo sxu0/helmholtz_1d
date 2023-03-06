@@ -102,11 +102,11 @@ if false  % exploration
     plot(imag(epsilons_POD), '.')
     ylabel("$\mathrm{imag} \left\{ \bar{\bar{\epsilon}}_N^\mathrm{POD} \right\}$")
     xlabel("N")
-    legend('Eigenvalue', 'Truncation Error up to $N$th Eigenmode', ...
-        'location', 'bestoutside', 'orientation', 'horizontal')
+    legend('Eigenvalue', 'Truncation Error up to $N$th Eigenmode')
     title(['\parbox[b]{5in}{\centering ' ...
         'Imaginary Parts of Sorted Eigenvalues \& Associated ' ...
         'Truncation Errors,\\ $n_\mathrm{train}=' num2str(n_train) '$ }'])
+    xlim('padded')
     ylim('padded')
     set(gcf, 'position', [250 250 640 540])
     % print(fullfile('figs', 'sorted_eigenvalues_and_errors_imag.png'), '-dpng')
@@ -124,6 +124,7 @@ if strcmp(plt, 'lin')
     legend('Eigenvalue', 'Truncation Error up to $N$th Eigenmode')
     title(['Real Parts of Sorted Eigenvalues \& Associated ' ...
         'Truncation Errors, $n_\mathrm{train}=' num2str(n_train) '$'])
+    xlim('padded')
     ylim('padded')
     set(gcf, 'position', [300 300 640 480])
 elseif strcmp(plt, 'log')
@@ -138,6 +139,7 @@ elseif strcmp(plt, 'log')
     legend('Eigenvalue', 'Truncation Error up to $N$th Eigenmode')
     title(['Real Parts of Sorted Eigenvalues \& Associated ' ...
         'Truncation Errors, $n_\mathrm{train}=' num2str(n_train) '$'])
+    xlim('padded')
     ylim('padded')
     set(gcf, 'position', [300 300 640 480])
 end

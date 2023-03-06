@@ -42,16 +42,16 @@ for j = 1:numel(k_arr)
         anim_soln = figure(2);
     end
     figure(2)
-    plot(xxx, real(uuu));
+    plot(xxx, real(uuu), Color="#0072BD");
     hold on
-    plot(xxx, imag(uuu));
+    plot(xxx, imag(uuu), Color="#D95319");
     hold off
     ymin = min(min(min(real(u_arr))), min(min(imag(u_arr))));
     ymax = max(max(max(real(u_arr))), max(max(imag(u_arr))));
     yrange = ymax - ymin;
     ylim([ymin - 0.1 * yrange, ymax + 0.1 * yrange])
     legend('real part', 'imag part')
-    text(0.055, 0.920, ['$k=' num2str(k_arr(j), '%.4f') '$'], units='normalized')
+    text(0.055, 0.920, ['$k=' num2str(k_arr(j)/pi, '%.2f') ' \pi$'], units='normalized')
     if exist('mag_inc_wave', 'var')
         BC_config = [': $A=' num2str(mag_inc_wave) '$'];
     else
