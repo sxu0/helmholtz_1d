@@ -5,7 +5,7 @@ addpath('lib')
 %% CONFIG
 save_figs = false;
 
-k_arr = linspace(0.1, 8, 40);
+k_arr = linspace(0.05, 2, 40) .* pi;
 n_train = 20;
 mag_inc_wave = 1;
 
@@ -21,7 +21,7 @@ if save_figs
 end
 
 %% OFFLINE STEPS
-err_tol = 2e-6;
+err_tol = 2e-1;
 [A1_N_max, A2_N_max, A3_N_max, F1_N_max, Z_N_max, mesh, ref] = rb_offline( ...
     n_train, err_tol);
 
