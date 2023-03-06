@@ -63,9 +63,8 @@ function q_err = q_err_abs(nelem, k, mag_inc_wave, p)
 end
 
 function u_err = u_err_h1_norm(nelem, k, mag_inc_wave, p)
-    bilinear_exact = 4 .* mag_inc_wave .^ 2 .* k ...
-        .* (1i .* sin(k) + cos(k)) .^ 2 ...
-        .* cos(k) .* (1i .* cos(k) - sin(k));
+    bilinear_exact = -4 .* mag_inc_wave .^ 2 .* k ...
+        .* exp(1i .* (k + pi/2)) .* cos(k);
 
     [uu_h, ~, ~, A] = fe_solver(k, mag_inc_wave, p, nelem);
     u_h_mat = repmat(uu_h, 1, size(uu_h, 1));

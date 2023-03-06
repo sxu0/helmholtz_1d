@@ -66,10 +66,10 @@ end
 ndof = size(mesh.coord, 1);  % p*nelem+1
 A1 = sparse(imat(:), jmat(:), amat1(:), ndof, ndof);  % Theta_a1 = 1
 A2 = sparse(imat(:), jmat(:), amat2(:), ndof, ndof);  % Theta_a2 = -k^2
-A3 = sparse(1, 1, 1i, ndof, ndof);  % Theta_a3 = k
+A3 = sparse(1, 1, -1i, ndof, ndof);  % Theta_a3 = k
 
 % set up param-indep load vector
 F1 = zeros(ndof, 1);
-F1(1, 1) = -2i * mag_inc_wave;  % Theta_f1 = k
+F1(1, 1) = 2i * mag_inc_wave;  % Theta_f1 = k
 
 end

@@ -73,13 +73,13 @@ end
 ndof = size(mesh.coord, 1);  % p*nelem+1
 A_H1 = sparse(imat(:), jmat(:), amat_H1(:), ndof, ndof);
 % assemble BC part of global stiffness matrix
-A_BC = sparse(1, 1, 1i * k, ndof, ndof);
+A_BC = sparse(1, 1, -1i * k, ndof, ndof);
 % put together global stiffness matrix
 A = A_H1 + A_BC;
 
 % set up global load vector
 F = zeros(ndof, 1);
-F(1, 1) = -2i * k * mag_inc_wave;
+F(1, 1) = 2i * k * mag_inc_wave;
 
 % solve linear system
 U = A \ F;
