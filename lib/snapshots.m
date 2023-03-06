@@ -70,7 +70,7 @@ for i = 1:n_train
     end
 end
 % build symmetric matrix from lower left triangular part
-C_POD = C_POD + C_POD' - eye(size(C_POD)) .* C_POD;
+C_POD = C_POD + C_POD.' - eye(size(C_POD)) .* C_POD;
 
 %% solve for normalized eigenvectors
 [psis, lambdas] = eig(C_POD);
@@ -82,7 +82,7 @@ lambdas_ordered = diag(lambdas);
 psis = psis(:, ind);
 
 % normalize eigenvectors such that their inner product is n_train * lambda_N
-psis = psis ./ sqrt(repmat(lambdas_ordered', n_train, 1) .* n_train);
+psis = psis ./ sqrt(repmat(lambdas_ordered.', n_train, 1) .* n_train);
 
 %% determine basis functions to truncate based on minimum error tolerance
 

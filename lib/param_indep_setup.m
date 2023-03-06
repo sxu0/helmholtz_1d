@@ -59,7 +59,7 @@ for elem = 1:nelem
     amat1(:,:,elem) = aaloc1;
     amat2(:,:,elem) = aaloc2;
     imat(:,:,elem) = repmat(tril, [1, nshp]);
-    jmat(:,:,elem) = repmat(tril', [nshp, 1]);
+    jmat(:,:,elem) = repmat(tril.', [nshp, 1]);
 end
 
 % assemble param-indep stiffness matrices

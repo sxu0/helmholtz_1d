@@ -66,7 +66,7 @@ for elem = 1:nelem
     % prepare element-to-node connectivity map
     amat_H1(:,:,elem) = aaloc;
     imat(:,:,elem) = repmat(tril, [1, nshp]);
-    jmat(:,:,elem) = repmat(tril', [nshp, 1]);
+    jmat(:,:,elem) = repmat(tril.', [nshp, 1]);
 end
 
 % assemble H1 part of global stiffness matrix
@@ -89,12 +89,12 @@ if plt == true
     figure(1), clf,
     % next 7 lines are sourced from `femmat/util/plot/plotfield1d()`
     nlp = size(ref.shp, 2);
-    xxplot = linspace(0, 1, 10*mesh.p)';
+    xxplot = linspace(0, 1, 10*mesh.p).';
     shp = shape1d(ref.p, ref.xint, xxplot);
     xtri = reshape(mesh.coord(mesh.tri), [nelem, nlp]);
     utri = reshape(U(mesh.tri), [nelem, nlp]);
-    xx = shp * xtri';
-    uu = shp * utri';
+    xx = shp * xtri.';
+    uu = shp * utri.';
     % flatten to 1D array without repeated nodes
     xxx = unique(xx);
     uuu = zeros(size(xxx));

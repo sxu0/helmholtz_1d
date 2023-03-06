@@ -52,7 +52,7 @@ for elem = 1:nelem
     % prep element-to-node connectivity map
     Xmat(:,:,elem) = Xaloc;
     imat(:,:,elem) = repmat(tril, [1, nshp]);
-    jmat(:,:,elem) = repmat(tril', [nshp, 1]);
+    jmat(:,:,elem) = repmat(tril.', [nshp, 1]);
 end
 
 % assemble matrix

@@ -24,12 +24,12 @@ for j = 1:numel(k_arr)
     % next 8 lines are sourced from `femmat/util/plot/plotfield1d()`
     nelem = size(mesh.tri, 1);
     nlp = size(ref.shp, 2);
-    xxplot = linspace(0, 1, 10*mesh.p)';
+    xxplot = linspace(0, 1, 10*mesh.p).';
     shp = shape1d(ref.p, ref.xint, xxplot);
     xtri = reshape(mesh.coord(mesh.tri), [nelem, nlp]);
     utri = reshape(U(mesh.tri), [nelem, nlp]);
-    xx = shp * xtri';
-    uu = shp * utri';
+    xx = shp * xtri.';
+    uu = shp * utri.';
     % flatten to 1D array without repeated nodes
     xxx = unique(xx);
     uuu = zeros(size(xxx));

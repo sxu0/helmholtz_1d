@@ -109,13 +109,13 @@ function [xx_h, uu_h] = higher_res(u_h, mesh, ref, res)
     % code adapted from femmat/util/plot/plotfield1d.m
     n_elem = size(mesh.tri, 1);
     nlp = size(ref.shp, 2);
-    xxplot = linspace(0, 1, res*mesh.p)';
+    xxplot = linspace(0, 1, res*mesh.p).';
     shp = shape1d(ref.p, ref.xint, xxplot);
     xtri = reshape(mesh.coord(mesh.tri), [n_elem, nlp]);
     utri = reshape(u_h(mesh.tri), [n_elem, nlp]);
-    xx_h = reshape(shp*xtri', 1, []);  % flatten to row vector
+    xx_h = reshape(shp*xtri.', 1, []);  % flatten to row vector
     % FE soln @ {res}x resolution
-    uu_h = reshape(shp*utri', 1, []);  % flatten to row vector
+    uu_h = reshape(shp*utri.', 1, []);  % flatten to row vector
 end
 
 end
