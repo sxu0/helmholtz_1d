@@ -70,7 +70,7 @@ for i = 1:n_train
     end
 end
 % build symmetric matrix from lower left triangular part
-C_POD = C_POD + C_POD.' - eye(size(C_POD)) .* C_POD;
+C_POD = C_POD + C_POD' - eye(size(C_POD)) .* C_POD;
 
 %% solve for normalized eigenvectors
 [psis, lambdas] = eig(C_POD);
@@ -79,6 +79,12 @@ C_POD = C_POD + C_POD.' - eye(size(C_POD)) .* C_POD;
 [~, ind] = sort(diag(lambdas), 'descend');
 lambdas = lambdas(ind, ind);  % dimensions {n_train by n_train}
 lambdas_ordered = diag(lambdas);
+if any(imag(lambdas_ordered) > 1e-4)  % hardcoded threshold at the moment
+    warning('C_POD not Hermitian!')
+else
+    % drop tiny imaginary parts from floating point error
+    lambdas_ordered = real(lambdas_ordered);
+end
 psis = psis(:, ind);
 
 % normalize eigenvectors such that their inner product is n_train * lambda_N
@@ -87,58 +93,39 @@ psis = psis ./ sqrt(repmat(lambdas_ordered.', n_train, 1) .* n_train);
 %% determine basis functions to truncate based on minimum error tolerance
 
 % calculate error up to each basis function
-epsilons_POD = sqrt(cumsum(lambdas_ordered, 'reverse'));  % L2 norm in param
+epsilons_POD = sqrt(cumsum(abs(lambdas_ordered), 'reverse'));  % L2 norm in param
 % format longg
 % epsilons_POD
 
 Ns = 1:numel(lambdas_ordered);
 
-if false  % exploration
-    figure
-    yyaxis left
-    plot(imag(lambdas_ordered), 'o')
-    ylabel("$\mathrm{imag} \left\{ \lambda^{\mathrm{POD},\,N} \right\}$")
-    yyaxis right
-    plot(imag(epsilons_POD), '.')
-    ylabel("$\mathrm{imag} \left\{ \bar{\bar{\epsilon}}_N^\mathrm{POD} \right\}$")
-    xlabel("N")
-    legend('Eigenvalue', 'Truncation Error up to $N$th Eigenmode')
-    title(['\parbox[b]{5in}{\centering ' ...
-        'Imaginary Parts of Sorted Eigenvalues \& Associated ' ...
-        'Truncation Errors,\\ $n_\mathrm{train}=' num2str(n_train) '$ }'])
-    xlim('padded')
-    ylim('padded')
-    set(gcf, 'position', [250 250 640 540])
-    % print(fullfile('figs', 'sorted_eigenvalues_and_errors_imag.png'), '-dpng')
-end
-
 if strcmp(plt, 'lin')
     figure
     yyaxis left
-    plot(Ns, real(lambdas_ordered), 'o')
-    ylabel("$\mathrm{real} \left\{ \lambda^{\mathrm{POD},\,N} \right\}$")
+    plot(Ns, lambdas_ordered, 'o')
+    ylabel("$\lambda^{\mathrm{POD},\,N}$")
     yyaxis right
-    plot(Ns, real(epsilons_POD), '.')
-    ylabel("$\mathrm{real} \left\{ \bar{\bar{\epsilon}}_N^\mathrm{POD} \right\}$")
+    plot(Ns, epsilons_POD, '.')
+    ylabel("$\bar{\bar{\epsilon}}_N^\mathrm{POD}$")
     xlabel("$N$")
     legend('Eigenvalue', 'Truncation Error up to $N$th Eigenmode')
-    title(['Real Parts of Sorted Eigenvalues \& Associated ' ...
-        'Truncation Errors, $n_\mathrm{train}=' num2str(n_train) '$'])
+    title(['Sorted Eigenvalues \& Associated Truncation Errors, ' ...
+        '$n_\mathrm{train}=' num2str(n_train) '$'])
     xlim('padded')
     ylim('padded')
     set(gcf, 'position', [300 300 640 480])
 elseif strcmp(plt, 'log')
     figure  % there is a kink!
     yyaxis left
-    semilogy(Ns, real(lambdas_ordered), 'o')
-    ylabel("$\mathrm{real} \left\{ \lambda^{\mathrm{POD},\,N} \right\}$")
+    semilogy(Ns, lambdas_ordered, 'o')
+    ylabel("$\lambda^{\mathrm{POD},\,N}$")
     yyaxis right
-    semilogy(Ns, real(epsilons_POD), '.')
-    ylabel("$\mathrm{real} \left\{ \bar{\bar{\epsilon}}_N^\mathrm{POD} \right\}$")
+    semilogy(Ns, epsilons_POD, '.')
+    ylabel("$\bar{\bar{\epsilon}}_N^\mathrm{POD}$")
     xlabel("$N$")
     legend('Eigenvalue', 'Truncation Error up to $N$th Eigenmode')
-    title(['Real Parts of Sorted Eigenvalues \& Associated ' ...
-        'Truncation Errors, $n_\mathrm{train}=' num2str(n_train) '$'])
+    title(['Sorted Eigenvalues \& Associated Truncation Errors, ' ...
+        '$n_\mathrm{train}=' num2str(n_train) '$'])
     xlim('padded')
     ylim('padded')
     set(gcf, 'position', [300 300 640 480])
