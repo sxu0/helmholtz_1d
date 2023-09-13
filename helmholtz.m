@@ -21,7 +21,7 @@ if save_figs
 end
 
 %% OFFLINE STEPS
-err_tol = 2e-1;
+err_tol = 1e-6; % 3e-6;
 [A1_N_max, A2_N_max, A3_N_max, F1_N_max, Z_N_max, mesh, ref] = rb_offline( ...
     n_train, err_tol);
 
