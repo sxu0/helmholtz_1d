@@ -1,4 +1,4 @@
-function [U, mesh, ref, A] = fe_solver(k, mag_inc_wave, p, nelem, plt)
+function [U, mesh, ref, A, err_term] = fe_solver(k, mag_inc_wave, p, nelem, plt)
 % Finite element solver for 1D Helmholtz equation.
 % Uses femmat library in UTIAS ACEL gitlab.
 %
@@ -39,6 +39,7 @@ nshp = size(ref.shp, 2);
 amat_H1 = zeros(nshp, nshp, nelem);
 imat = zeros(nshp, nshp, nelem);
 jmat = zeros(nshp, nshp, nelem);
+phiumat_H1 = zeros(nshp, 1, nelem);
 for elem = 1:nelem
     % get dof indices
     tril = mesh.tri(elem,:).';  % each row is indices of nodes on local element
@@ -67,6 +68,11 @@ for elem = 1:nelem
     amat_H1(:,:,elem) = aaloc;
     imat(:,:,elem) = repmat(tril, [1, nshp]);
     jmat(:,:,elem) = repmat(tril.', [nshp, 1]);
+
+    % (partial) error estimates carried through in parallel
+    [uq, uxq] = uq_uxq(ref, nelem, elem, k, mag_inc_wave);
+    phiumat_H1(:,:,elem) = phixq(:,:,1).' * diag(wqJ) * conj(uxq) ...
+        + phiq(:,:,1).' * diag(wqJ) * conj(uq);
 end
 
 % assemble H1 part of global stiffness matrix
@@ -77,12 +83,19 @@ A_BC = sparse(1, 1, -1i * k, ndof, ndof);
 % put together global stiffness matrix
 A = A_H1 + A_BC;
 
+% assemble (partial) error estimate inner product vector
+ivec = imat(:,1,:);
+phiu_H1 = sparse(ivec(:), ones(size(ivec(:))), phiumat_H1(:), ndof, 1);
+
 % set up global load vector
 F = zeros(ndof, 1);
 F(1, 1) = 2i * k * mag_inc_wave;
 
 % solve linear system
 U = A \ F;
+
+% obtain partial error estimate
+err_term = sum(U.' * phiu_H1);
 
 % plot solution
 if plt == true

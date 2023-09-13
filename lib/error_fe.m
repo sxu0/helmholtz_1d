@@ -62,15 +62,15 @@ function q_err = q_err_abs(nelem, k, mag_inc_wave, p)
     q_err = abs(q_h - q_exact);
 end
 
-function u_err = u_err_h1_norm(nelem, k, mag_inc_wave, p)
-    bilinear_exact = -4 .* mag_inc_wave .^ 2 .* k ...
-        .* exp(1i .* (k + pi/2)) .* cos(k);
+function u_err = u_err_h1_norm(nelem, mag_inc_wave, k, p)
+    u_u_term = mag_inc_wave^2 * ((k^2 - 1) / k * sin(-2*k) + 2*k^2 + 2);
 
-    [uu_h, ~, ~, A] = fe_solver(k, mag_inc_wave, p, nelem);
-    u_h_mat = repmat(uu_h, 1, size(uu_h, 1));
-    bilinear_fe = sum(u_h_mat .* u_h_mat.' .* A, 'all');
+    [uh, ~, ~, ~, uh_u_term] = fe_solver(k, mag_inc_wave, p, nelem);
 
-    u_err = sqrt(bilinear_exact - bilinear_fe);
+    X = h1_inprod_matrix(p, nelem);
+    uh_uh_term = uh' * X * uh;
+
+    u_err = sqrt(uh_uh_term - 2 * uh_u_term + u_u_term);
 end
 
 function uu = exact_soln(xx, k, mag_inc_wave)
