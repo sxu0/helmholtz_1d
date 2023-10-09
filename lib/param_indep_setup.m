@@ -2,6 +2,8 @@ function [A1, A2, A3, F1] = param_indep_setup(mag_inc_wave, p, nelem)
 % Assembles parameter-independent stiffness matrices & load vectors
 % for offline-online decomposition of reduced-basis solver.
 % Note that Q_a = 3 and Q_f = 1 here.
+% Also note that the H1 inner product matrix can be constructed by
+% X_H1 = A1 + A2.
 %
 % inputs
 % ------
