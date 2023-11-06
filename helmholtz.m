@@ -7,7 +7,7 @@ save_figs = false;
 
 kk_train = linspace(0, 2, 41) .* pi;
 n_train = numel(kk_train);
-mag_inc_wave = 1;
+wave_ampl = 1;
 
 p = 2;
 nelem = 1000;
@@ -15,7 +15,7 @@ nelem = 1000;
 %% RB ACCURACY
 % plot eigenvalues & associated errors
 % examine + set ideal error tolerance below
-[~, ~, ~] = snapshots(kk_train, 1, p, nelem, 'log', mag_inc_wave);
+[~, ~, ~] = snapshots(kk_train, 1, p, nelem, 'log', wave_ampl);
 if save_figs
     print(fullfile('figs', 'sorted_eigenvalues_and_errors_real.png'), '-dpng')
 end
@@ -27,12 +27,12 @@ err_tol = 5.5e-6;
 
 %% ONLINE STEPS
 kk_test = sort(random('Uniform', 0, 2*pi, [1, 81]));
-[u_N_arr, q_N_arr, u_arr] = rb_online( ...
-    A1_N_max, A2_N_max, A3_N_max, F1_N_max, Z_N_max, mag_inc_wave, kk_test);
+[uu_N, qq_N, uu] = rb_online( ...
+    A1_N_max, A2_N_max, A3_N_max, F1_N_max, Z_N_max, wave_ampl, kk_test);
 
 %% VISUALIZATION
 if ~exist('N', 'var')
-    N = size(u_N_arr, 1);
+    N = size(uu_N, 1);
 end
 if save_figs
     output_gif = fullfile('figs', ...
@@ -41,12 +41,12 @@ else
     output_gif = '';
 end
 visualize( ...
-    kk_test, u_arr, mesh, ref, mag_inc_wave, n_train, N, output_gif);
+    kk_test, uu, mesh, ref, wave_ampl, n_train, N, output_gif);
 
 %% QUANTITY OF INTEREST
-q_arr = quantity_of_interest(u_arr, mag_inc_wave);
+qq = quantity_of_interest(uu, wave_ampl);
 figure;
-plot(kk_test, q_arr, 'o')
+plot(kk_test, qq, 'o')
 xlim('padded')
 ylim('padded')
 xlabel('$k$')
@@ -56,10 +56,10 @@ title(['RB output $q_N$ by $k$, $n_\mathrm{train}=' ...
 
 %% FE ERROR CONVERGENCE
 nnelem = 2 .^ (1:12);
-[u_err_fe, q_err_fe] = error_fe(nnelem, 2*pi, mag_inc_wave, p, true);
+[u_err_fe, q_err_fe] = error_fe(nnelem, 2*pi, wave_ampl, p, true);
 % see error_fe.m for a couple of things to check
 
 %% RB ERROR CONVERGENCE
-NN = 2:size(u_N_arr, 1);
+NN = 2:size(uu_N, 1);
 [u_err_NN, q_err_NN] = error_rb( ...
-    NN, kk_test, kk_train, err_tol, mag_inc_wave, p, nelem, true);
+    NN, kk_test, kk_train, err_tol, wave_ampl, p, nelem, true);
