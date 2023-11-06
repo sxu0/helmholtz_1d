@@ -1,11 +1,11 @@
-function [Z_N_max, mesh, ref] = snapshots(n_train, epsilon_tol, p, nelem, plt, mag_inc_wave)
+function [Z_N_max, mesh, ref] = snapshots(kk_train, epsilon_tol, p, nelem, plt, mag_inc_wave)
 % Produce snapshots sampled across parameter space, solved by FEM.
 % Outputs reduced basis matrix, containing reduced basis functions.
 %
 % inputs
 % ------
-% n_train (int): number of parameter space samples to solve fully; aka
-%   number of snapshots to produce
+% kk_train (array of floats): training points sampled in parameter space;
+%   a snapshot is produced for each k
 % epsilon_tol (float): error threshold for truncating tailing eigenmodes
 % p (int, optional): polynomial degree of FE Lagrange basis, defaults to 2
 % nelem (int, optional): number of FE mesh elements in FE discretization,
@@ -32,8 +32,7 @@ set(groot, 'defaultAxesTickLabelInterpreter', 'latex');
 set(groot, 'defaulttextinterpreter', 'latex');
 set(groot, 'defaultLegendInterpreter', 'latex');
 
-% sample parameter space evenly in linspace? logspace?
-k_train_arr = linspace(0.1, 6, n_train);
+n_train = numel(kk_train);  % number of snapshots to produce
 
 % FE specifications
 if ~exist('p', 'var')
@@ -47,12 +46,12 @@ N_t = p * nelem + 1;  % dim of "truth" FE approx
 %% solve problem for each mu
 U_store = zeros(N_t, n_train);
 for n = 1:n_train
-    mu = k_train_arr(n);
+    k = kk_train(n);
     % U are {p*nelem+1 by 1} vectors
     if n == 1
-        [U_n, mesh, ref] = fe_solver(mu, mag_inc_wave, p, nelem);
+        [U_n, mesh, ref] = fe_solver(k, mag_inc_wave, p, nelem);
     else
-        [U_n, ~, ~] = fe_solver(mu, mag_inc_wave, p, nelem);
+        [U_n, ~, ~] = fe_solver(k, mag_inc_wave, p, nelem);
     end
     U_store(:, n) = U_n;
 end

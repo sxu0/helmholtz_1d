@@ -1,4 +1,4 @@
-function [u_err_NN, q_err_NN] = error_rb(NN, kk_test, n_train, err_tol, mag_inc_wave, p, nelem, plt)
+function [u_err_NN, q_err_NN] = error_rb(NN, kk_test, kk_train, err_tol, mag_inc_wave, p, nelem, plt)
 % Studies error convergence by N (RB dimension).
 % Error is defined as the maximum of those evaluated at each k.
 % H1 norm is taken for solution error, and absolute value for output error.
@@ -8,7 +8,7 @@ function [u_err_NN, q_err_NN] = error_rb(NN, kk_test, n_train, err_tol, mag_inc_
 % NN (array of ints): array of N (RB dimension) at which to observe error
 % kk_test (array of floats): array of k (nondimensionalized wavenumber)
 %   at which solution is of interest
-% n_train (int): number of snapshots to produce
+% kk_train (array of floats): training points sampled in parameter space
 % err_tol (float): error threshold for truncating tailing eigenmodes
 % p (int): polynomial degree of FE Lagrange basis
 % nelem (int): number of FE mesh elements in FE discretization
@@ -24,9 +24,11 @@ if ~exist('plt', 'var')
     plt = false;
 end
 
+n_train = numel(kk_train);  % number of snapshots to produce
+
 % offline steps
 [offline.A1_N_max, offline.A2_N_max, offline.A3_N_max, ...
-    offline.F1_N_max, offline.Z_N_max] = rb_offline(n_train, err_tol);
+    offline.F1_N_max, offline.Z_N_max] = rb_offline(kk_train, err_tol);
 
 % online steps for each N
 u_err_NN = zeros(size(NN));

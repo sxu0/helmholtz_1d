@@ -1,5 +1,5 @@
 function [A1_N_max, A2_N_max, A3_N_max, F1_N_max, Z_N_max, mesh, ref] = rb_offline( ...
-    n_train, err_tol, mag_inc_wave, p, nelem ...
+    kk_train, err_tol, mag_inc_wave, p, nelem ...
     )
 % Offline procedure for reduced-basis solver, including
 % producing snapshots & setting up parameter-independent
@@ -7,7 +7,7 @@ function [A1_N_max, A2_N_max, A3_N_max, F1_N_max, Z_N_max, mesh, ref] = rb_offli
 %
 % inputs
 % ------
-% n_train (int): number of snapshots to produce
+% kk_train (array of floats): training points sampled in parameter space
 % err_tol (float): error threshold for truncating tailing eigenmodes
 % mag_inc_wave (float): nondimensionalized magnitude of incident wave
 % p (int): polynomial degree of FE Lagrange basis
@@ -39,7 +39,7 @@ end
 
 % compute reduced basis
 [Z_N_max, mesh, ref] = snapshots( ...
-    n_train, err_tol, p, nelem, false, mag_inc_wave ...
+    kk_train, err_tol, p, nelem, false, mag_inc_wave ...
     );
 
 % assemble parameter-independent stiffness matrices & load vector
